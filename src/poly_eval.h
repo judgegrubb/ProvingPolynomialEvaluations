@@ -4,13 +4,14 @@
 #include <NTL/ZZ.h>
 #include <NTL/ZZ_p.h>
 #include <NTL/ZZ_pX.h>
+#include <vector>
 
 using namespace NTL;
 
 struct PublicKey {
   ZZ p;
-  // need array (g_0, g_1, ... g_d)
-  // need array (h_0, h_1, ... h_d)
+  std::vector<ZZ_p> gList; // (g_0, g_1, ... g_d)
+  std::vector<ZZ_p> hList; // (h_0, h_1, ... h_d)
 };
 
 struct VerifKey {
@@ -37,7 +38,7 @@ struct Proof {
 //    (pk, vk):
 //        pk => proving key (p, g0, h0, ... gd, hd)
 //        vk => verification key (p, g, s, a)
-KeyPair KGen(int lambda, int d);
+KeyPair KGen(int lambda, long d);
 
 // input:
 //    pk => proving key
@@ -47,8 +48,7 @@ KeyPair KGen(int lambda, int d);
 //    pi => (pi_1, pi_2)
 //    pi_1 => 
 //    pi_2 =>
-Proof P(PublicKey pk, int f, int t);
-
+Proof P(PublicKey pk, ZZ_pX f, ZZ_p t);
 
 // input:
 //    vk => verification key
@@ -59,6 +59,6 @@ Proof P(PublicKey pk, int f, int t);
 // output:
 //    1 => accept proof
 //    0 => reject proof
-int V(VerifKey vk, int f, int t, int y, Proof pi);
+int V(VerifKey vk, ZZ_pX f, ZZ_p t, ZZ_p y, Proof pi);
 
 #endif

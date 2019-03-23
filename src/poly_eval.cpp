@@ -1,7 +1,7 @@
 #include "poly_eval.h"
 
-#include <NTL/ZZ.h>
 #include <NTL/ZZ_p.h>
+#include <vector>
 
 using namespace NTL;
 
@@ -12,7 +12,7 @@ using namespace NTL;
 //    (pk, vk):
 //        pk => proving key (p, g0, h0, ... gd, hd)
 //        vk => verification key (p, g, s, a)
-KeyPair KGen(int lambda, int d) {
+KeyPair KGen(int lambda, long d) {
   // choose random prime p of lamda bits such that q = (p - 1)/2 is also prime
   ZZ q = GenGermainPrime_ZZ(lambda);
   ZZ p = 2 * q + 1;
@@ -26,15 +26,27 @@ KeyPair KGen(int lambda, int d) {
   ZZ_p g = sqr(w);
 
   // Sample random s <- ZZ_q* and alpha <- ZZ_q*
-  
+  ZZ_p::init(q);
+  ZZ_p s = random_ZZ_p();
+  ZZ_p a = random_ZZ_p();
+
+  ZZ_p::init(p);
+
+  std::vector<ZZ_p> gList;
+  std::vector<ZZ_p> hList;
+
   // For i = 0 to d compute g_i <- g^(s^i)) mod p and h_i <- g^(alpha * s^i) mod p
+  for (int i = 0; i < d; i++) {
+    gList.push_back(power(g,rep(power(s,i)))); // g_i <- g^(s^i)
+    hList.push_back(power(g,rep(a*power(s,i)))); // h_i <- g^(a * s^i)
+  }
+
+  // pk <- (p, gList, hList) and vk <- (p, g, s, alpha)
+  PublicKey pk { p, gList, hList};
   
-  // pk <- (p, g_0, h_0, ..., g_d, h_d) and vk <- (p, g, s, alpha)
+  VerifKey vk = { p, g, s, a};
   
   // return (pk, sk)
-  PublicKey pk;
-  pk.p = p;
-  VerifKey vk;
   KeyPair pkvk;
   pkvk.pk = pk;
   pkvk.vk = vk;
@@ -49,7 +61,7 @@ KeyPair KGen(int lambda, int d) {
 //    pi => (pi_1, pi_2)
 //    pi_1 => 
 //    pi_2 =>
-Proof P(PublicKey pk, int f, int t) {
+Proof P(PublicKey pk, ZZ_pX f, ZZ_p t) {
   Proof pi;
   return pi;
 }
@@ -64,6 +76,6 @@ Proof P(PublicKey pk, int f, int t) {
 // output:
 //    1 => accept proof
 //    0 => reject proof
-int V(VerifKey vk, int f, int t, int y, Proof pi) {
+int V(VerifKey vk, ZZ_pX f, ZZ_p t, ZZ_p y, Proof pi) {
   return 0;
 }
