@@ -27,8 +27,8 @@ struct KeyPair {
 };
 
 struct Proof {
-  // pi_1
-  // pi_2
+  ZZ_p pi_1;
+  ZZ_p pi_2;
 };
 
 // input:

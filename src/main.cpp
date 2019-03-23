@@ -28,7 +28,7 @@ int main () {
   ZZ_p t = random_ZZ_p();
 
   // Compute y <- f(t) mod q
-  ZZ_p y;
+  ZZ_p y = eval(f, t);
 
   // Run pi <- P(pk, f, t)
   Proof pi = P(pkvk.pk, f, t);

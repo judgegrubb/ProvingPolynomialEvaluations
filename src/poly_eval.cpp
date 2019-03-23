@@ -43,7 +43,6 @@ KeyPair KGen(int lambda, long d) {
 
   // pk <- (p, gList, hList) and vk <- (p, g, s, alpha)
   PublicKey pk { p, gList, hList};
-  
   VerifKey vk = { p, g, s, a};
   
   // return (pk, sk)
@@ -77,5 +76,16 @@ Proof P(PublicKey pk, ZZ_pX f, ZZ_p t) {
 //    1 => accept proof
 //    0 => reject proof
 int V(VerifKey vk, ZZ_pX f, ZZ_p t, ZZ_p y, Proof pi) {
+  ZZ_p::init(vk.p);
+  ZZ_p h_f = power(vk.g, rep(eval(f,vk.s)));
+ 
+  ZZ_p neg_y;
+  negate(neg_y, y);
+
+  if (power(pi.pi_1,rep(vk.s - t)) == h_f * power(vk.g, rep(neg_y)) 
+      && power(pi.pi_1, rep(vk.a)) == pi.pi_2) {
+    return 1;
+  }
+
   return 0;
 }
