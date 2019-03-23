@@ -7,3 +7,11 @@ Fun opportunity to brush up on my C++ knowledge!
 
 Requires [Victor Shoup's Library for Number Theory](https://www.shoup.net/ntl/)
 and all the prereqs involved there.
+
+To run:
+```
+cd src
+make
+./main
+```
+
