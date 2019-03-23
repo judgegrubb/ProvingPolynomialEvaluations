@@ -22,7 +22,7 @@ int main () {
   ZZ_p::init(q);
 
   // Choose a random (univariate) polynomial f of degree d
-  ZZ_pX f = random_ZZ_pX(d);
+  ZZ_pX f = random_ZZ_pX(d+1);
   
   // Choose a random point t <- ZZ_q (get from pk?)
   ZZ_p t = random_ZZ_p();
