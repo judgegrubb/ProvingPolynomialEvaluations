@@ -30,8 +30,6 @@ int main () {
   // Compute y <- f(t) mod q
   ZZ_p y = eval(f, t);
 
-  ZZ_p::init(pkvk.pk.p);
-
   // Run pi <- P(pk, f, t)
   Proof pi = P(pkvk.pk, f, t);
 
