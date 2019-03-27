@@ -28,8 +28,10 @@ Design decisions:
 - In order to avoid computationally complex exponentation, but retain valid
   exponents, many calculations `X`, s.t. `g^X mod p` was needed, were
   jcalculated as `X mod (p-1)` as per [Euler's Theorem and the Euler
-  phi-function](https://math.stackexchange.com/questions/491576/simplifying-large-exponents-in-modular-arithmetic-like-1007-in-41007-pmod)
-  (e.g. calculating `s^i` for `g^(s^i)`.)
+  phi-function](https://math.stackexchange.com/questions/491576/simplifying-large-exponents-in-modular-arithmetic-like-1007-in-41007-pmod).
+  (e.g. calculating `s^i` for `g^(s^i)`)
+- Plenty of included comments should help reference what part of protocol
+  each piece of code belongs to.
 
 TODO(?):
 - Is there enough switching between `ZZ_p::init(p)`,`ZZ_p::init(q)`, and
