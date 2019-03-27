@@ -15,3 +15,8 @@ make
 ./main
 ```
 
+To clean up executables:
+```
+cd src
+make clean
+```
