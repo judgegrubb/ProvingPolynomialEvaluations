@@ -57,6 +57,6 @@ Proof P(PublicKey pk, ZZ_pX f, ZZ_p t);
 // output:
 //    1 => accept proof
 //    0 => reject proof
-int V(VerifKey vk, ZZ_pX f, ZZ_p t, ZZ y, Proof pi);
+int V(VerifKey vk, ZZ_pX f, ZZ_p t, ZZ_p y, Proof pi);
 
 #endif

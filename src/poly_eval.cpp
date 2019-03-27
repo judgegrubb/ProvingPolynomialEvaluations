@@ -107,14 +107,14 @@ Proof P(PublicKey pk, ZZ_pX f, ZZ_p t) {
 // output:
 //    1 => accept proof
 //    0 => reject proof
-int V(VerifKey vk, ZZ_pX f, ZZ_p t, ZZ y, Proof pi) {
+int V(VerifKey vk, ZZ_pX f, ZZ_p t, ZZ_p y, Proof pi) {
   ZZ_p::init(vk.p-1);
 
   ZZ temp = rep(eval(f,vk.s));
   ZZ_p::init(vk.p);
   ZZ_p h_f = power(vk.g, temp);
 
-  if (power(pi.pi_1,rep(vk.s) - rep(t)) == h_f * power(vk.g, -1 * y) 
+  if (power(pi.pi_1,rep(vk.s) - rep(t)) == h_f * power(vk.g, -1 * rep(y)) 
       && power(pi.pi_1, rep(vk.a)) == pi.pi_2) {
     return 1;
   }

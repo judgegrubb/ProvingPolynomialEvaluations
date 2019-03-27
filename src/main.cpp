@@ -27,9 +27,8 @@ int main () {
   // Choose a random point t <- ZZ_q
   ZZ_p t = random_ZZ_p();
 
-  ZZ_p::init(pkvk.pk.p -1);
   // Compute y <- f(t) mod q
-  ZZ y = rep(eval(f, t));
+  ZZ_p y = eval(f, t);
 
   ZZ_p::init(pkvk.pk.p);
 
