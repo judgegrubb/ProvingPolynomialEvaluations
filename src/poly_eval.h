@@ -1,8 +1,6 @@
 #ifndef _Polynomial_Evaluation_H
 #define _Polynomial_Evaluation_H
 
-#include <NTL/ZZ.h>
-#include <NTL/ZZ_p.h>
 #include <NTL/ZZ_pX.h>
 #include <vector>
 
@@ -59,6 +57,6 @@ Proof P(PublicKey pk, ZZ_pX f, ZZ_p t);
 // output:
 //    1 => accept proof
 //    0 => reject proof
-int V(VerifKey vk, ZZ_pX f, ZZ_p t, ZZ_p y, Proof pi);
+int V(VerifKey vk, ZZ_pX f, ZZ_p t, ZZ y, Proof pi);
 
 #endif

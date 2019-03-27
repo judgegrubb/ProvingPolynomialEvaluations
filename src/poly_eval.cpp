@@ -1,6 +1,6 @@
 #include "poly_eval.h"
 
-#include <NTL/ZZ_p.h>
+#include <NTL/ZZ_pX.h>
 #include <vector>
 
 using namespace NTL;
@@ -36,9 +36,10 @@ KeyPair KGen(int lambda, long d) {
   std::vector<ZZ_p> hList;
 
   // For i = 0 to d compute g_i <- g^(s^i)) mod p and h_i <- g^(alpha * s^i) mod p
-  for (int i = 0; i < d; i++) {
-    gList.push_back(power(g,rep(power(s,i)))); // g_i <- g^(s^i)
-    hList.push_back(power(g,rep(a*power(s,i)))); // h_i <- g^(a * s^i)
+  for (int i = 0; i <= d; i++) {
+    ZZ temp = PowerMod(rep(s), i, p-1);
+    gList.push_back(power(g,temp)); // g_i <- g^(s^i)
+    hList.push_back(power(g,rep(a)*temp)); // h_i <- g^(a * s^i)
   }
 
   // pk <- (p, gList, hList) and vk <- (p, g, s, alpha)
@@ -61,7 +62,38 @@ KeyPair KGen(int lambda, long d) {
 //    pi_1 => 
 //    pi_2 =>
 Proof P(PublicKey pk, ZZ_pX f, ZZ_p t) {
+
+  ZZ q = (pk.p - 1) / 2;
+
+  ZZ_p::init(pk.p);
+  ZZ_p pi_1;
+  ZZ_p pi_2;
+  set(pi_1);
+  set(pi_2);
+
+  // calculate psi
+  // f(X) - f(t)
+  ZZ_p::init(pk.p - 1);
+  ZZ_p y = eval(f,t);
+  ZZ_pX psi = f - y;
+  // X - t
+  ZZ_pX denom = ZZ_pX();
+  SetX(denom);
+  denom = denom - t;
+  // f(X) - f(t) / X - t
+  psi = psi / denom;
+
+  //ZZ_p::init(pk.p);
+  // calculate g^psi(s) and g^(a*psi(s)) from gList and hList
+  ZZ_p::init(pk.p);
+  for (int i = 0; i <= deg(psi); i++) {
+    pi_1 = pi_1 * power(pk.gList.at(i), rep(coeff(psi,i)));
+    pi_2 = pi_2 * power(pk.hList.at(i), rep(coeff(psi, i)));
+  }
+
   Proof pi;
+  pi.pi_1 = pi_1;
+  pi.pi_2 = pi_2;
   return pi;
 }
 
@@ -75,14 +107,14 @@ Proof P(PublicKey pk, ZZ_pX f, ZZ_p t) {
 // output:
 //    1 => accept proof
 //    0 => reject proof
-int V(VerifKey vk, ZZ_pX f, ZZ_p t, ZZ_p y, Proof pi) {
-  ZZ_p::init(vk.p);
-  ZZ_p h_f = power(vk.g, rep(eval(f,vk.s)));
- 
-  ZZ_p neg_y;
-  negate(neg_y, y);
+int V(VerifKey vk, ZZ_pX f, ZZ_p t, ZZ y, Proof pi) {
+  ZZ_p::init(vk.p-1);
 
-  if (power(pi.pi_1,rep(vk.s - t)) == h_f * power(vk.g, rep(neg_y)) 
+  ZZ temp = rep(eval(f,vk.s));
+  ZZ_p::init(vk.p);
+  ZZ_p h_f = power(vk.g, temp);
+
+  if (power(pi.pi_1,rep(vk.s) - rep(t)) == h_f * power(vk.g, -1 * y) 
       && power(pi.pi_1, rep(vk.a)) == pi.pi_2) {
     return 1;
   }
