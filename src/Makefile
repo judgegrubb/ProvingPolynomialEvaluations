@@ -1,4 +1,4 @@
-all:
+all: main.cpp poly_eval.cpp poly_eval.h
 	g++ -g -O2 -std=c++11 -pthread -march=native main.cpp poly_eval.cpp -o main -lntl -lgmp -lm
 
 clean:

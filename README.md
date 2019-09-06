@@ -6,7 +6,9 @@ Implements a not-very-good verified computing protocol.
 Fun opportunity to brush up on my C++ knowledge! 
 
 Requires [Victor Shoup's Library for Number Theory](https://www.shoup.net/ntl/)
-and all the prereqs involved there.
+and all the prereqs involved there. This library assumes that NTL is installed
+in `/usr/local`. Tested with versions 11.3.2 and 11.3.3 of NTL and version
+6.1.2 of GMP.
 
 To run:
 ```
